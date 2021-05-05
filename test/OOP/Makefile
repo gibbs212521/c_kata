@@ -1,7 +1,108 @@
-DIRPATH=.\..\bin
-FILEPATH=$(DIRPATH)\test.exe
-#$(SOMETHING) = 1,2,3,4
-TEST_STR = 0
+##### CONSTANT BOILER PLATE #######
+DIRPATH=.\..\..\src\OOP
+BINPATH=.\..\bin
+OBJPATH=.\..\obj
+TESTDIR=.
+TEST_BINPATH=.\..\bin
+TEST_OBJPATH=.\..\obj
+
+FILENAME=oop
+TESTNAME=test_oop
+
+
+### app file ending ###
+# NMAKE code here \
+!ifndef 0 # \  
+EXE_FILETYPE=.exe # \
+!else
+# Make code here 
+EXE_FILETYPE=#
+#
+!endif
+
+
+INCL= 
+CC=gcc
+CFLAGS= #-I $(INCL)
+
+
+TESTBIN=$(TEST_OBJPATH)\$(TESTNAME).o
+CTEST=$(TESTDIR)\$(TESTNAME).c
+TEST_EXE=$(TEST_BINPATH)\$(TESTNAME)$(EXE_FILETYPE)
+
+SOURCES = $(CTEST)
+HEADERS = 
+APPS = $(TEST_EXE)
+
+FILEBIN=$(OBJPATH)\$(FILENAME).o
+CFILE=$(DIRPATH)\$(FILENAME).c
+FILE_EXE=$(BINPATH)\$(FILENAME)$(EXE_FILETYPE)
+
+SOURCES = $(SOURCES) $(CFILE)
+HEADERS = $(HEADERS) 
+APPS = $(APPS) $(FILE_EXE)
+
+OBJBUILDS =
+TST_OBJBUILDS =
+
+##### VARYING FILE BOILER PLATE #######
+OBJ1PATH=
+OBJ1NAME=
+OBJ1SRC=
+OBJ1HDR=
+OBJ1=
+
+SOURCES = $(SOURCES) $(OBJ1SRC)
+HEADERS = $(HEADERS) $(OBJ1HDR)
+OBJECTS = $(OBJECTS) $(OBJ1)
+OBJSRCS = $(SOURCES) $(OBJ1SRC)
+OBJBUILDS = #$(OBJBUILDS) 1
+
+
+OBJ2PATH=
+OBJ2NAME=
+OBJ2SRC=
+OBJ2HDR=
+OBJ2=
+
+SOURCES = $(SOURCES) $(OBJ2SRC)
+HEADERS = $(HEADERS) $(OBJ2HDR)
+OBJECTS = $(OBJECTS) $(OBJ2)
+OBJSRCS = $(SOURCES) $(OBJ1SRC)
+OBJBUILDS = #$(OBJBUILDS) 2
+
+
+
+##### VARYING FILE BOILER PLATE #######
+TST_OBJ1PATH=
+TST_OBJ1NAME=
+TST_OBJ1SRC=
+TST_OBJ1HDR=
+TST_OBJ1=
+
+SOURCES = $(SOURCES) $(TST_OBJ1SRC)
+HEADERS = $(HEADERS) $(TST_OBJ1HDR)
+OBJECTS = $(OBJECTS) $(TST_OBJ1)
+OBJSRCS = $(SOURCES) $(TST_OBJ1SRC)
+
+TST_OBJ2PATH=
+TST_OBJ2NAME=
+TST_OBJ2SRC=
+TST_OBJ2HDR=
+TST_OBJ2=
+
+SOURCES = $(SOURCES) $(TST_OBJ2SRC)
+HEADERS = $(HEADERS) $(TST_OBJ2HDR)
+OBJECTS = $(OBJECTS) $(TST_OBJ2)
+OBJSRCS = $(SOURCES) $(TST_OBJ2SRC)
+
+
+OBJNAME=
+OBJDIRPATH=.
+OBJBIN=#$(DIRPATH)\$(OBJDIRPATH)\$(OBJNAME).o
+OBJ=#$(TEST_OBJPATH)\$(OBJNAME)
+
+
 
 # Code below should allow nmake and make to operate successfully
 # NMAKE code here \
@@ -17,36 +118,48 @@ CP=cp -f #
 # 
 !endif
 
-MAKE: test.o
-  gcc test.o -o $(FILEPATH)
 
-test.o: test.c
-  gcc -c test.c -o test.o
 
-test.c:
-	FOR %%A IN (1 2 3) DO \
-	SET VAR1=%VAR1%%%A \
-	SET VAR2=%VAR2%%%A \
-	echo %%A
-#	@echo off
-#	FOR %%i in ($(SOMETHING)) do echo %%i 1 && echo %%i 2 && echo %%i 3
-#    FOR /F "tokens=4 delims=," %%G IN ("deposit,$4500,123.4,12-AUG-09") \#
-    FOR /F "tokens=4 delims=," %%G IN ("deposit,$4500,123.4,12-AUG-09") \
+##### CONSTANT BUILD #######
+MAKE: $(FILEBIN) $(TESTBIN) $(OBJECTS)
+  nmake build
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
+  nmake clean_up
+
+MAKE_OBJ: $(FILEBIN) $(TESTBIN) $(OBJECTS)
+  nmake build
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
+
+fast: $(FILEBIN) $(TESTBIN) $(OBJECTS)
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
+  nmake clean_up
+
+$(FILEBIN): $(CFILE)
+  (cd $(DIRPATH) && nmake MAKE_OBJ)
+
+$(TESTBIN): $(CTEST)
+  $(CC) -c $(CFLAGS) $(CTEST) -o $(TESTBIN)
+  nmake BUILD_OBJ
+
+build:
+  $(CP) blankmake Makefile
+  FOR %%i IN ($(OBJBUILDS))\
     DO \
-	echo TEST_STR=%%G
-	echo $(TEST_STR)
-#	echo %%G
-#	$(TEST_STR) = "test"
-#    echo Date paid %%G echo 123
-#	@echo on
-  echo int main() > test.c
-  echo { >> test.c
-  echo strcpy(food, "BACON!"); >> test.c
-  echo printf("This is the best food ever, %%s.  It was assigned with the string copy (strcpy) command.\n", food); >> test.c
-  echo return 0; >> test.c
-  echo } >> test.c
+      @echo( $$(CC) $$(CFLAGS) -c $$(TST_OBJ%%iSRC) -o $$(TST_OBJ%%i) >> Makefile
 
-clean all:
-  $(RM) test.c
-  $(RM) test.o
-  $(RM) $(FILEPATH)
+clean:
+  $(RM) $(APPS)
+
+clean_up:
+  $(RM) $(FILEBIN) $(TESTBIN) $(OBJECTS)
+
+clean_all:
+  nmake clean_up
+  nmake clean
+  
+BUILD_OBJ: 
+  @echo building...
+#####  VARIABLE BUILD  #####

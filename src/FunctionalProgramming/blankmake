@@ -1,9 +1,9 @@
 ##### CONSTANT BOILER PLATE #######
 DIRPATH=.
-BINPATH=.\..\bin
-OBJPATH=.\..\obj
+BINPATH=.\..\..\bin
+OBJPATH=.\..\..\obj
 
-FILENAME=kata
+FILENAME=func_prog
 
 
 ### app file ending ###
@@ -22,39 +22,46 @@ CC=gcc
 CFLAGS= #-I $(INCL)
 
 
+
+SOURCES = 
+HEADERS = 
+APPS = 
+
 FILEBIN=$(OBJPATH)\$(FILENAME).o
 CFILE=$(DIRPATH)\$(FILENAME).c
 FILE_EXE=$(BINPATH)\$(FILENAME)$(EXE_FILETYPE)
 
-SOURCES = $(CFILE)
-HEADERS =  
-APPS = $(FILE_EXE)
+SOURCES = $(SOURCES) $(CFILE)
+HEADERS = $(HEADERS) 
+APPS = $(APPS) $(FILE_EXE)
+
+OBJBUILDS =
 
 ##### VARYING FILE BOILER PLATE #######
-OBJ1PATH=$(DIRPATH)\OOP
-OBJ1NAME=oop
-OBJ1SRC=$(OBJ1PATH)\$(OBJ1NAME).c
-OBJ1HDR=$(OBJ1PATH)\$(OBJ1NAME).h
-OBJ1=$(OBJPATH)\$(OBJ1NAME).o
+OBJ1PATH=
+OBJ1NAME=
+OBJ1SRC=
+OBJ1HDR=
+OBJ1=
 
 SOURCES = $(SOURCES) $(OBJ1SRC)
 HEADERS = $(HEADERS) $(OBJ1HDR)
 OBJECTS = $(OBJECTS) $(OBJ1)
 OBJSRCS = $(SOURCES) $(OBJ1SRC)
-OBJBUILDS = 1
+OBJBUILDS = #$(OBJBUILDS) 1
 
 
-OBJ2PATH=$(DIRPATH)\FunctionalProgramming
-OBJ2NAME=func_prog
-OBJ2SRC=$(OBJ2PATH)\$(OBJ2NAME).c
-OBJ2HDR=$(OBJ2PATH)\$(OBJ2NAME).h
-OBJ2=$(OBJPATH)\$(OBJ2NAME).o
+OBJ2PATH=
+OBJ2NAME=
+OBJ2SRC=
+OBJ2HDR=
+OBJ2=
 
 SOURCES = $(SOURCES) $(OBJ2SRC)
 HEADERS = $(HEADERS) $(OBJ2HDR)
 OBJECTS = $(OBJECTS) $(OBJ2)
 OBJSRCS = $(SOURCES) $(OBJ1SRC)
-OBJBUILDS = $(OBJBUILDS) 2
+OBJBUILDS = #$(OBJBUILDS) 2
 
 
 
@@ -82,17 +89,21 @@ MAKE: $(FILEBIN) $(OBJECTS)
 
 MAKE_OBJ: $(FILEBIN) $(OBJECTS)
   nmake build
-  $(CC) $(CFLAGS) -c $(CFILE) -o $(FILEBIN)
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+
+fast: $(FILEBIN) $(OBJECTS)
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  nmake clean_up
 
 $(FILEBIN): $(CFILE)
-  $(CC) $(CFLAGS) -c $(CFILE) -o $(FILEBIN)
+  $(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
   nmake BUILD_OBJ
 
 build:
   $(CP) blankmake Makefile
   FOR %%i IN ($(OBJBUILDS))\
     DO \
-      @echo( $(CC) $(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
+      @echo( $$(CC) $$(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
 
 clean:
   $(RM) $(APPS)
@@ -103,7 +114,7 @@ clean_up:
 clean_all:
   nmake clean_up
   nmake clean
-
-BUILD_OBJ:
+  
+BUILD_OBJ: 
   @echo building...
 #####  VARIABLE BUILD  #####

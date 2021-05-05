@@ -1,9 +1,13 @@
 ##### CONSTANT BOILER PLATE #######
-DIRPATH=.
-BINPATH=.\..\..\bin
-OBJPATH=.\..\..\obj
+DIRPATH=.\..\..\src\FunctionalProgramming
+BINPATH=.\..\bin
+OBJPATH=.\..\obj
+TESTDIR=.
+TEST_BINPATH=.\..\bin
+TEST_OBJPATH=.\..\obj
 
-FILENAME=oop
+FILENAME=func_prog
+TESTNAME=test_func_prog
 
 
 ### app file ending ###
@@ -22,10 +26,13 @@ CC=gcc
 CFLAGS= #-I $(INCL)
 
 
+TESTBIN=$(TEST_OBJPATH)\$(TESTNAME).o
+CTEST=$(TESTDIR)\$(TESTNAME).c
+TEST_EXE=$(TEST_BINPATH)\$(TESTNAME)$(EXE_FILETYPE)
 
-SOURCES = 
+SOURCES = $(CTEST)
 HEADERS = 
-APPS = 
+APPS = $(TEST_EXE)
 
 FILEBIN=$(OBJPATH)\$(FILENAME).o
 CFILE=$(DIRPATH)\$(FILENAME).c
@@ -36,6 +43,7 @@ HEADERS = $(HEADERS)
 APPS = $(APPS) $(FILE_EXE)
 
 OBJBUILDS =
+TST_OBJBUILDS =
 
 ##### VARYING FILE BOILER PLATE #######
 OBJ1PATH=
@@ -65,6 +73,39 @@ OBJBUILDS = #$(OBJBUILDS) 2
 
 
 
+##### VARYING FILE BOILER PLATE #######
+TST_OBJ1PATH=
+TST_OBJ1NAME=
+TST_OBJ1SRC=
+TST_OBJ1HDR=
+TST_OBJ1=
+
+SOURCES = $(SOURCES) $(TST_OBJ1SRC)
+HEADERS = $(HEADERS) $(TST_OBJ1HDR)
+OBJECTS = $(OBJECTS) $(TST_OBJ1)
+OBJSRCS = $(SOURCES) $(TST_OBJ1SRC)
+TST_OBJBUILDS = #$(TST_OBJBUILDS) 1
+
+TST_OBJ2PATH=
+TST_OBJ2NAME=
+TST_OBJ2SRC=
+TST_OBJ2HDR=
+TST_OBJ2=
+
+SOURCES = $(SOURCES) $(TST_OBJ2SRC)
+HEADERS = $(HEADERS) $(TST_OBJ2HDR)
+OBJECTS = $(OBJECTS) $(TST_OBJ2)
+OBJSRCS = $(SOURCES) $(TST_OBJ2SRC)
+TST_OBJBUILDS = #$(TST_OBJBUILDS) 2
+
+
+OBJNAME=
+OBJDIRPATH=.
+OBJBIN=#$(DIRPATH)\$(OBJDIRPATH)\$(OBJNAME).o
+OBJ=#$(TEST_OBJPATH)\$(OBJNAME)
+
+
+
 # Code below should allow nmake and make to operate successfully
 # NMAKE code here \
 !ifndef 0 # \  
@@ -82,34 +123,40 @@ CP=cp -f #
 
 
 ##### CONSTANT BUILD #######
-MAKE: $(FILEBIN) $(OBJECTS)
+MAKE: $(FILEBIN) $(TESTBIN) $(OBJECTS)
   nmake build
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
   nmake clean_up
 
-MAKE_OBJ: $(FILEBIN) $(OBJECTS)
+MAKE_OBJ: $(FILEBIN) $(TESTBIN) $(OBJECTS)
   nmake build
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
 
-fast: $(FILEBIN) $(OBJECTS)
+fast: $(FILEBIN) $(TESTBIN) $(OBJECTS)
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
   nmake clean_up
 
 $(FILEBIN): $(CFILE)
-  $(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
+  (cd $(DIRPATH) && nmake MAKE_OBJ)
+
+$(TESTBIN): $(CTEST)
+  $(CC) -c $(CFLAGS) $(CTEST) -o $(TESTBIN)
   nmake BUILD_OBJ
 
 build:
   $(CP) blankmake Makefile
   FOR %%i IN ($(OBJBUILDS))\
     DO \
-      @echo( $$(CC) $$(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
+      @echo( $$(CC) $$(CFLAGS) -c $$(TST_OBJ%%iSRC) -o $$(TST_OBJ%%i) >> Makefile
 
 clean:
   $(RM) $(APPS)
 
 clean_up:
-  $(RM) $(FILEBIN) $(OBJECTS)
+  $(RM) $(FILEBIN) $(TESTBIN) $(OBJECTS)
 
 clean_all:
   nmake clean_up
