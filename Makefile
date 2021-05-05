@@ -1,5 +1,7 @@
 # DIRPATH is root directory of program
 DIRPATH=.
+SRCPATH=.\src
+TSTPATH=.\test
 # DIRPATH=.\..\bin\kata
 BINPATH=.\bin
 OBJPATH=.\obj
@@ -7,7 +9,7 @@ OBJPATH=.\obj
 FILENAME=test
 
 ### app file ending ###
-# NMAKE code here \
+# $(MAKE_CALL) code here \
 !ifndef 0 # \  
 EXE_FILETYPE=.exe # \
 !else
@@ -30,34 +32,31 @@ SOURCES = $(CFILE)
 HEADERS = 
 APPS = $(FILE_EXE)
 
+OOPDIR = OOP
+FPGDIR = FunctionalProgramming
 
-OBJNAME=
-OBJDIRPATH=.
-OBJBIN=#$(DIRPATH)\$(OBJDIRPATH)\$(OBJNAME).o
-OBJ=#$(OBJPATH)\$(OBJNAME)
+MAKEDIRS = $(SRCPATH)
+MAKEDIRS = $(MAKEDIRS) $(SRCPATH)\$(OOPDIR)
+MAKEDIRS = $(MAKEDIRS) $(SRCPATH)\$(FPGDIR)
 
-# SOURCES += 
-# HEADERS += 
-OBJECTS = 
-# APPS += 
-
-# SOURCES += 
-# HEADERS += 
-# OBJECTS += 
-# APPS += 
+MAKEDIRS = $(MAKEDIRS) $(TSTPATH)
+MAKEDIRS = $(MAKEDIRS) $(TSTPATH)\$(OOPDIR)
+MAKEDIRS = $(MAKEDIRS) $(TSTPATH)\$(FPGDIR)
 
 
-# Code below should allow nmake and make to operate successfully
-# NMAKE code here \
+# Code below should allow $(MAKE_CALL) and make to operate successfully
+# $(MAKE_CALL) code here \
 !ifndef 0 # \  
 MV=move # \
 RM=del # \
 CP=copy # \
+MAKE_CALL=nmake # \
 !else
 # Make code here 
 MV=mv -f # 
 RM=rm -f # 
 CP=cp -f # 
+MAKE_CALL=make #
 # 
 !endif
 
@@ -66,7 +65,7 @@ CP=cp -f #
 MAKE: $(FILEBIN) $(OBJECTS)
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
 #  gcc test.o -o test.exe 
-  nmake clean_up
+  $(MAKE_CALL) clean_up
 
 $(FILEBIN): $(CFILE)
   $(CC) $(CFLAGS) -c $(CFILE) -o $(FILEBIN)
@@ -77,7 +76,7 @@ $(CFILE):
   echo >> README
   echo >> Note blankmake files are unbuilt makefiles that are copied as the Makefile. >>README
   echo >> There may be staged build out for some makefiles, but they should be self contained >> README
-  echo >> so that you can build a file with only nmake or make commands. >> README
+  echo >> so that you can build a file with only $(MAKE_CALL) or make commands. >> README
   @echo on
   echo ^# include ^<stdio.h^> > $(FILENAME).c
   echo int main() >> $(FILENAME).c
@@ -85,6 +84,13 @@ $(CFILE):
   echo printf("Hello World!"); >> $(FILENAME).c
   echo return 0; >> $(FILENAME).c
   echo } >> $(FILENAME).c
+
+build:
+  FOR %%i IN ($(MAKEDIRS))\
+    DO \
+    ( cd %%i && $(MAKE_CALL) build )
+  
+  
 
 clean :
   $(RM) $(APPS)

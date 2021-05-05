@@ -7,5 +7,5 @@ void func_prog_test_suite()
 }
 
 void test_0_pass_method(){
-    printf("See this Func Prog!!");
+    printf("See this Func Prog!!\n");
 }

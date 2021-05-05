@@ -11,7 +11,7 @@ TESTNAME=kata_test
 
 
 ### app file ending ###
-# NMAKE code here \
+# $(MAKE_CALL) code here \
 !ifndef 0 # \  
 EXE_FILETYPE=.exe # \
 !else
@@ -102,17 +102,19 @@ OBJ=#$(TEST_OBJPATH)\$(OBJNAME)
 
 
 
-# Code below should allow nmake and make to operate successfully
-# NMAKE code here \
+# Code below should allow $(MAKE_CALL) and make to operate successfully
+# $(MAKE_CALL) code here \
 !ifndef 0 # \  
 MV=move # \
 RM=del # \
 CP=copy # \
+MAKE_CALL=nmake # \
 !else
 # Make code here 
 MV=mv -f # 
 RM=rm -f # 
 CP=cp -f # 
+MAKE_CALL=make #
 # 
 !endif
 
@@ -120,27 +122,27 @@ CP=cp -f #
 
 ##### CONSTANT BUILD #######
 MAKE: $(FILEBIN) $(TESTBIN) $(OBJECTS) $(TST_OBJECTS)
-  nmake build
+  $(MAKE_CALL) build
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
   $(CC) $(CFLAGS) $(TESTBIN) $(TST_OBJECTS) -o $(TEST_EXE)
-  nmake clean_up
+  $(MAKE_CALL) clean_up
 
 MAKE_OBJ: $(FILEBIN) $(TESTBIN) $(OBJECTS)
-  nmake build
+  $(MAKE_CALL) build
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
   $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
 
 fast: $(FILEBIN) $(TESTBIN) $(OBJECTS)
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
   $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
-  nmake clean_up
+  $(MAKE_CALL) clean_up
 
 $(FILEBIN): $(CFILE)
-  (cd $(DIRPATH) && nmake MAKE_OBJ)
+  (cd $(DIRPATH) && $(MAKE_CALL) MAKE_OBJ)
 
 $(TESTBIN): $(CTEST)
   $(CC) -c $(CFLAGS) $(CTEST) -o $(TESTBIN)
-  nmake BUILD_OBJ
+  $(MAKE_CALL) BUILD_OBJ
 
 build::
   $(CP) blankmake Makefile
@@ -151,6 +153,12 @@ build::
     DO \
     @echo( $$(CC) $$(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
 
+run:
+  ($(FILE_EXE))
+
+test:
+  ($(TEST_EXE))
+
 clean:
   $(RM) $(APPS)
 
@@ -158,8 +166,8 @@ clean_up:
   $(RM) $(FILEBIN) $(TESTBIN) $(OBJECTS) $(TST_OBJECTS)
 
 clean_all:
-  nmake clean_up
-  nmake clean
+  $(MAKE_CALL) clean_up
+  $(MAKE_CALL) clean
   
 BUILD_OBJ: 
   @echo building...

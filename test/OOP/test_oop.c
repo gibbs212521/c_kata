@@ -1,11 +1,10 @@
 #include "test_oop.h"
-#include <stdio.h>
 
 void oop_test_suite()
 {
-    test_0();
+    test_0_class_inheritance();
 }
 
-void test_0(){
-    printf("See this OOP!!");
+void test_0_class_inheritance(){
+    printf("See this OOP!!\n");
 }

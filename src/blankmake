@@ -7,7 +7,7 @@ FILENAME=kata
 
 
 ### app file ending ###
-# NMAKE code here \
+# $(MAKE_CALL) code here \
 !ifndef 0 # \  
 EXE_FILETYPE=.exe # \
 !else
@@ -58,17 +58,19 @@ OBJBUILDS = $(OBJBUILDS) 2
 
 
 
-# Code below should allow nmake and make to operate successfully
-# NMAKE code here \
+# Code below should allow $(MAKE_CALL) and make to operate successfully
+# $(MAKE_CALL) code here \
 !ifndef 0 # \  
 MV=move # \
 RM=del # \
 CP=copy # \
+MAKE_CALL=nmake # \
 !else
 # Make code here 
 MV=mv -f # 
 RM=rm -f # 
 CP=cp -f # 
+MAKE_CALL=make #
 # 
 !endif
 
@@ -76,23 +78,26 @@ CP=cp -f #
 
 ##### CONSTANT BUILD #######
 MAKE: $(FILEBIN) $(OBJECTS)
-  nmake build
+  $(MAKE_CALL) build
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
-  nmake clean_up
+  $(MAKE_CALL) clean_up
 
 MAKE_OBJ: $(FILEBIN) $(OBJECTS)
-  nmake build
+  $(MAKE_CALL) build
   $(CC) $(CFLAGS) -c $(CFILE) -o $(FILEBIN)
 
 $(FILEBIN): $(CFILE)
   $(CC) $(CFLAGS) -c $(CFILE) -o $(FILEBIN)
-  nmake BUILD_OBJ
+  $(MAKE_CALL) BUILD_OBJ
 
 build:
   $(CP) blankmake Makefile
   FOR %%i IN ($(OBJBUILDS))\
     DO \
       @echo( $(CC) $(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
+
+run:
+  ($(FILE_EXE))
 
 clean:
   $(RM) $(APPS)
@@ -101,8 +106,8 @@ clean_up:
   $(RM) $(FILEBIN) $(OBJECTS)
 
 clean_all:
-  nmake clean_up
-  nmake clean
+  $(MAKE_CALL) clean_up
+  $(MAKE_CALL) clean
 
 BUILD_OBJ:
   @echo building...
