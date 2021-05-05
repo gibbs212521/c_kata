@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "test_oop.h": "c"
+        "test_oop.h": "c",
+        "statistics.h": "c",
+        "membook.h": "c"
     }
 }

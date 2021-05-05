@@ -42,7 +42,7 @@ OBJBUILDS =
 CLASSDIR=$(DIRPATH)\classes
 
 OBJ1PATH=$(CLASSDIR)
-OBJ1NAME=Stats
+OBJ1NAME=Statistics
 OBJ1SRC=$(CLASSDIR)\$(OBJ1NAME).c
 OBJ1HDR=$(CLASSDIR)\$(OBJ1NAME).h
 OBJ1=$(OBJDIRPATH)\$(OBJ1NAME).o
@@ -152,3 +152,7 @@ clean_all:
 BUILD_OBJ: 
   @echo building...
 #####  VARIABLE BUILD  #####
+ $(CC) $(CFLAGS) -c $(OBJ1SRC) -o $(OBJ1) 
+ $(CC) $(CFLAGS) -c $(OBJ2SRC) -o $(OBJ2) 
+ $(CC) $(CFLAGS) -c $(OBJ3SRC) -o $(OBJ3) 
+ $(CC) $(CFLAGS) -c $(OBJ4SRC) -o $(OBJ4) 
