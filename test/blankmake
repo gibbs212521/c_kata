@@ -1,0 +1,167 @@
+##### CONSTANT BOILER PLATE #######
+DIRPATH=.\..\src
+BINPATH=.\..\bin
+OBJPATH=.\..\obj
+TESTDIR=.
+TEST_BINPATH=.\bin
+TEST_OBJPATH=.\obj
+
+FILENAME=kata
+TESTNAME=kata_test
+
+
+### app file ending ###
+# NMAKE code here \
+!ifndef 0 # \  
+EXE_FILETYPE=.exe # \
+!else
+# Make code here 
+EXE_FILETYPE=#
+#
+!endif
+
+
+INCL= 
+CC=gcc
+CFLAGS= #-I $(INCL)
+
+
+TESTBIN=$(TEST_OBJPATH)\$(TESTNAME).o
+CTEST=$(TESTDIR)\$(TESTNAME).c
+TEST_EXE=$(TEST_BINPATH)\$(TESTNAME)$(EXE_FILETYPE)
+
+SOURCES = $(CTEST)
+HEADERS = 
+APPS = $(TEST_EXE)
+
+FILEBIN=$(OBJPATH)\$(FILENAME).o
+CFILE=$(DIRPATH)\$(FILENAME).c
+FILE_EXE=$(BINPATH)\$(FILENAME)$(EXE_FILETYPE)
+
+SOURCES = $(SOURCES) $(CFILE)
+HEADERS = $(HEADERS) 
+APPS = $(APPS) $(FILE_EXE)
+
+OBJBUILDS =
+TST_OBJBUILDS =
+
+##### VARYING FILE BOILER PLATE #######
+OBJ1PATH=
+OBJ1NAME=
+OBJ1SRC=
+OBJ1HDR=
+OBJ1=
+
+SOURCES = $(SOURCES) $(OBJ1SRC)
+HEADERS = $(HEADERS) $(OBJ1HDR)
+OBJECTS = $(OBJECTS) $(OBJ1)
+OBJSRCS = $(SOURCES) $(OBJ1SRC)
+OBJBUILDS = #$(OBJBUILDS) 1
+
+
+OBJ2PATH=
+OBJ2NAME=
+OBJ2SRC=
+OBJ2HDR=
+OBJ2=
+
+SOURCES = $(SOURCES) $(OBJ2SRC)
+HEADERS = $(HEADERS) $(OBJ2HDR)
+OBJECTS = $(OBJECTS) $(OBJ2)
+OBJSRCS = $(SOURCES) $(OBJ1SRC)
+OBJBUILDS = #$(OBJBUILDS) 2
+
+
+
+##### VARYING FILE BOILER PLATE #######
+TST_OBJ1PATH=
+TST_OBJ1NAME=
+TST_OBJ1SRC=
+TST_OBJ1HDR=
+TST_OBJ1=
+
+SOURCES = $(SOURCES) $(TST_OBJ1SRC)
+HEADERS = $(HEADERS) $(TST_OBJ1HDR)
+OBJECTS = $(OBJECTS) $(TST_OBJ1)
+OBJSRCS = $(SOURCES) $(TST_OBJ1SRC)
+TST_OBJBUILDS = #$(TST_OBJBUILDS) 1
+
+TST_OBJ2PATH=
+TST_OBJ2NAME=
+TST_OBJ2SRC=
+TST_OBJ2HDR=
+TST_OBJ2=
+
+SOURCES = $(SOURCES) $(TST_OBJ2SRC)
+HEADERS = $(HEADERS) $(TST_OBJ2HDR)
+OBJECTS = $(OBJECTS) $(TST_OBJ2)
+OBJSRCS = $(SOURCES) $(TST_OBJ2SRC)
+TST_OBJBUILDS = #$(TST_OBJBUILDS) 2
+
+
+OBJNAME=
+OBJDIRPATH=.
+OBJBIN=#$(DIRPATH)\$(OBJDIRPATH)\$(OBJNAME).o
+OBJ=#$(TEST_OBJPATH)\$(OBJNAME)
+
+
+
+# Code below should allow nmake and make to operate successfully
+# NMAKE code here \
+!ifndef 0 # \  
+MV=move # \
+RM=del # \
+CP=copy # \
+!else
+# Make code here 
+MV=mv -f # 
+RM=rm -f # 
+CP=cp -f # 
+# 
+!endif
+
+
+
+##### CONSTANT BUILD #######
+MAKE: $(FILEBIN) $(TESTBIN) $(OBJECTS)
+  nmake build
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
+  nmake clean_up
+
+MAKE_OBJ: $(FILEBIN) $(TESTBIN) $(OBJECTS)
+  nmake build
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
+
+fast: $(FILEBIN) $(TESTBIN) $(OBJECTS)
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
+  nmake clean_up
+
+$(FILEBIN): $(CFILE)
+  (cd $(DIRPATH) && nmake MAKE_OBJ)
+
+$(TESTBIN): $(CTEST)
+  $(CC) -c $(CFLAGS) $(CTEST) -o $(TESTBIN)
+  nmake BUILD_OBJ
+
+build:
+  $(CP) blankmake Makefile
+  FOR %%i IN ($(OBJBUILDS))\
+    DO \
+      @echo( $$(CC) $$(CFLAGS) -c $$(TST_OBJ%%iSRC)-o $$(TST_OBJ%%i) >> Makefile
+
+clean:
+  $(RM) $(APPS)
+
+clean_up:
+  $(RM) $(FILEBIN) $(TESTBIN) $(OBJECTS)
+
+clean_all:
+  nmake clean_up
+  nmake clean
+  
+BUILD_OBJ: 
+  @echo building...
+#####  VARIABLE BUILD  #####
