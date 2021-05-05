@@ -1,6 +1,5 @@
 #include "oop.h"
-#include <stdio.h>
 
 void runMethodOOP(){
-    printf("Not my dog OOP");
+    printf("Not my dog OOP\n");
 }
