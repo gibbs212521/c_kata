@@ -135,6 +135,7 @@ fast: $(FILEBIN) $(OBJECTS)
 $(FILEBIN): $(CFILE)
   $(MAKE_CALL) build
   $(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
+  $(MAKE_CALL) BUILD_OBJ
 
 build::
   $(CP) blankmake Makefile
