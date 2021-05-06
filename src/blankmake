@@ -22,6 +22,7 @@ CC=gcc
 CFLAGS= #-I $(INCL)
 
 
+
 FILEBIN=$(OBJPATH)\$(FILENAME).o
 CFILE=$(DIRPATH)\$(FILENAME).c
 FILE_EXE=$(BINPATH)\$(FILENAME)$(EXE_FILETYPE)
@@ -29,6 +30,7 @@ FILE_EXE=$(BINPATH)\$(FILENAME)$(EXE_FILETYPE)
 SOURCES = $(CFILE)
 HEADERS =  
 APPS = $(FILE_EXE)
+
 
 ##### VARYING FILE BOILER PLATE #######
 OBJ1PATH=$(DIRPATH)\OOP
@@ -58,6 +60,48 @@ OBJBUILDS = $(OBJBUILDS) 2
 
 
 
+CLASS1DIR=$(OBJ1PATH)\classes
+
+OBJ3PATH=$(CLASS1DIR)
+OBJ3NAME=Statistics
+OBJ3SRC=$(CLASS1DIR)\$(OBJ3NAME).c
+OBJ3HDR=$(CLASS1DIR)\$(OBJ3NAME).h
+OBJ3=$(OBJPATH)\$(OBJ3NAME).o
+
+SOURCES = $(SOURCES) $(OBJ3SRC)
+HEADERS = $(HEADERS) $(OBJ3HDR)
+OBJECTS = $(OBJECTS) $(OBJ3)
+OBJSRCS = $(SOURCES) $(OBJ3SRC)
+OBJBUILDS = $(OBJBUILDS) 3
+
+
+OBJ4PATH=$(CLASS1DIR)
+OBJ4NAME=Book
+OBJ4SRC=$(CLASS1DIR)\$(OBJ4NAME).c
+OBJ4HDR=$(CLASS1DIR)\$(OBJ4NAME).h
+OBJ4=$(OBJPATH)\$(OBJ4NAME).o
+
+SOURCES = $(SOURCES) $(OBJ4SRC)
+HEADERS = $(HEADERS) $(OBJ4HDR)
+OBJECTS = $(OBJECTS) $(OBJ4)
+OBJSRCS = $(SOURCES) $(OBJ4SRC)
+OBJBUILDS = $(OBJBUILDS) 4
+
+
+OBJ5PATH=$(CLASS1DIR)
+OBJ5NAME=MemBook
+OBJ5SRC=$(CLASS1DIR)\$(OBJ5NAME).c
+OBJ5HDR=$(CLASS1DIR)\$(OBJ5NAME).h
+OBJ5=$(OBJPATH)\$(OBJ5NAME).o
+
+SOURCES = $(SOURCES) $(OBJ5SRC)
+HEADERS = $(HEADERS) $(OBJ5HDR)
+OBJECTS = $(OBJECTS) $(OBJ5)
+OBJSRCS = $(SOURCES) $(OBJ5SRC)
+OBJBUILDS = $(OBJBUILDS) 5
+
+
+
 # Code below should allow $(MAKE_CALL) and make to operate successfully
 # $(MAKE_CALL) code here \
 !ifndef 0 # \  
@@ -77,24 +121,26 @@ MAKE_CALL=make #
 
 
 ##### CONSTANT BUILD #######
-MAKE: $(FILEBIN) $(OBJECTS)
-  $(MAKE_CALL) build
+MAKE: $(FILEBIN) $(OBJECTS) $(TST_OBJECTS)
   $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
   $(MAKE_CALL) clean_up
 
 MAKE_OBJ: $(FILEBIN) $(OBJECTS)
-  $(MAKE_CALL) build
-  $(CC) $(CFLAGS) -c $(CFILE) -o $(FILEBIN)
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+
+fast: $(FILEBIN) $(OBJECTS)
+  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+  $(MAKE_CALL) clean_up
 
 $(FILEBIN): $(CFILE)
-  $(CC) $(CFLAGS) -c $(CFILE) -o $(FILEBIN)
-  $(MAKE_CALL) BUILD_OBJ
+  $(MAKE_CALL) build
+  $(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
 
-build:
+build::
   $(CP) blankmake Makefile
   FOR %%i IN ($(OBJBUILDS))\
     DO \
-      @echo( $(CC) $(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
+    @echo( $$(CC) $$(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
 
 run:
   ($(FILE_EXE))
@@ -108,7 +154,7 @@ clean_up:
 clean_all:
   $(MAKE_CALL) clean_up
   $(MAKE_CALL) clean
-
-BUILD_OBJ:
+  
+BUILD_OBJ: 
   @echo building...
 #####  VARIABLE BUILD  #####
