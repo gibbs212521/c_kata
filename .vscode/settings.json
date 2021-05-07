@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "test_oop.h": "c",
-        "statistics.h": "c",
-        "membook.h": "c",
-        "test_func_prog.h": "c",
-        "func_prog.h": "c"
-    }
-}
