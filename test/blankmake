@@ -3,16 +3,16 @@ DIRPATH=.\..\src
 BINPATH=.\..\bin
 OBJPATH=.\..\obj
 TESTDIR=.
-TEST_BINPATH=.\bin
-TEST_OBJPATH=.\obj
+TEST_BINPATH=$(TESTDIR)\bin
+TEST_OBJPATH=$(TESTDIR)\obj
 
 FILENAME=kata
 TESTNAME=kata_test
 
 
 ### app file ending ###
-# $(MAKE_CALL) code here \
-!ifndef 0 # \  
+# $(MAKE_CALL) code here 
+!ifndef 0 # \	
 EXE_FILETYPE=.exe # \
 !else
 # Make code here 
@@ -198,70 +198,72 @@ TST_OBJBUILDS = $(TST_OBJBUILDS) 2
 
 # Code below should allow $(MAKE_CALL) and make to operate successfully
 # $(MAKE_CALL) code here \
-!ifndef 0 # \  
-MV=move # \
+!ifndef 0# \
+MV = move # \
 RM=del # \
 CP=copy # \
 MAKE_CALL=nmake # \
 !else
+ifeq (0,0) #
 # Make code here 
 MV=mv -f # 
 RM=rm -f # 
 CP=cp -f # 
 MAKE_CALL=make #
-# 
-!endif
+endif #
+# \
+!endif 
 
 
 
 ##### CONSTANT BUILD #######
 MAKE: $(FILEBIN) $(TESTBIN) $(OBJECTS) $(TST_OBJECTS)
-  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
-  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) $(TST_OBJECTS) -o $(TEST_EXE)
-  $(MAKE_CALL) clean_up
+	$(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+	$(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) $(TST_OBJECTS) -o $(TEST_EXE)
+	$(MAKE_CALL) clean_up
 
 MAKE_OBJ: $(FILEBIN) $(TESTBIN) $(OBJECTS)
-  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
-  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
+	$(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+	$(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
 
 fast: $(TESTBIN) $(OBJECTS)
-  $(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
-  $(MAKE_CALL) clean_up
+	$(CC) $(CFLAGS) $(TESTBIN) $(OBJECTS) -o $(TEST_EXE)
+	$(MAKE_CALL) clean_up
 
 $(FILEBIN): $(CFILE)
-  $(MAKE_CALL) build
-  $(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
+	$(MAKE_CALL) build
+	$(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
 
 $(TESTBIN): $(CTEST)
-  $(MAKE_CALL) build
-  $(CC) -c $(CFLAGS) $(CTEST) -o $(TESTBIN)
-  $(MAKE_CALL) BUILD_OBJ
+	$(MAKE_CALL) build
+	$(CC) -c $(CFLAGS) $(CTEST) -o $(TESTBIN)
+	$(MAKE_CALL) BUILD_OBJ
 
 build::
-  $(CP) blankmake Makefile
-  FOR %%i IN ($(TST_OBJBUILDS))\
-    DO \
-    @echo( $$(CC) $$(CFLAGS) -c $$(TST_OBJ%%iSRC) -o $$(TST_OBJ%%i) >> Makefile
-  FOR %%i IN ($(OBJBUILDS))\
-    DO \
-    @echo( $$(CC) $$(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
+	$(CP) blankmake Makefile
+	FOR %%i IN ($(TST_OBJBUILDS))\
+		DO \
+		@echo( $$(CC) $$(CFLAGS) -c $$(TST_OBJ%%iSRC) -o $$(TST_OBJ%%i) >> Makefile
+	FOR %%i IN ($(OBJBUILDS))\
+		DO \
+		@echo( $$(CC) $$(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
 
 run:
-  ($(FILE_EXE))
+	($(FILE_EXE))
 
 test:
-  ($(TEST_EXE))
+	($(TEST_EXE))
 
 clean:
-  $(RM) $(APPS)
+	$(RM) $(APPS)
 
 clean_up:
-  $(RM) $(FILEBIN) $(TESTBIN) $(OBJECTS) $(TST_OBJECTS)
+	$(RM) $(FILEBIN) $(TESTBIN) $(OBJECTS) $(TST_OBJECTS)
 
 clean_all:
-  $(MAKE_CALL) clean_up
-  $(MAKE_CALL) clean
-  
+	$(MAKE_CALL) clean_up
+	$(MAKE_CALL) clean
+	
 BUILD_OBJ: 
-  @echo building...
-#####  VARIABLE BUILD  #####
+	@echo building...
+#####	VARIABLE BUILD	#####

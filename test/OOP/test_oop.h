@@ -1,10 +1,19 @@
-#ifndef __TEST_FUNCTIONAL_PROGRAMMING_H__
-#define __TEST_FUNCTIONAL_PROGRAMMING_H__
+#ifndef __TST_OOP_H__
+#define __TST_OOP_H__
+#ifdef _WIN32
 #include ".\..\test.h"
 #include ".\..\..\src\OOP\oop.h"
 #include ".\..\..\src\OOP\classes\Book.h"
 #include ".\..\..\src\OOP\classes\MemBook.h"
 #include ".\..\..\src\OOP\classes\Statistics.h"
+#elif __linux__
+#include "./../test.h"
+#include "./../../src/OOP/oop.h"
+#include "./../../src/OOP/classes/Book.h"
+#include "./../../src/OOP/classes/MemBook.h"
+#include "./../../src/OOP/classes/Statistics.h"
+#endif
+
 
 void oop_test_suite();
 void test_1_test_statistics();

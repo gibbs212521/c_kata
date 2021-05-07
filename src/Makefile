@@ -7,8 +7,8 @@ FILENAME=kata
 
 
 ### app file ending ###
-# $(MAKE_CALL) code here \
-!ifndef 0 # \  
+# $(MAKE_CALL) code here 
+!ifndef 0 # \	
 EXE_FILETYPE=.exe # \
 !else
 # Make code here 
@@ -27,9 +27,9 @@ FILEBIN=$(OBJPATH)\$(FILENAME).o
 CFILE=$(DIRPATH)\$(FILENAME).c
 FILE_EXE=$(BINPATH)\$(FILENAME)$(EXE_FILETYPE)
 
-SOURCES = $(CFILE)
-HEADERS =  
-APPS = $(FILE_EXE)
+SOURCES = $(SOURCES) $(CFILE)
+HEADERS =
+APPS = $(APPS) $(FILE_EXE)
 
 
 ##### VARYING FILE BOILER PLATE #######
@@ -146,63 +146,71 @@ OBJBUILDS = $(OBJBUILDS) 8
 
 # Code below should allow $(MAKE_CALL) and make to operate successfully
 # $(MAKE_CALL) code here \
-!ifndef 0 # \  
-MV=move # \
+!ifndef 0# \
+MV = move # \
 RM=del # \
 CP=copy # \
 MAKE_CALL=nmake # \
 !else
+ifeq (0,0) #
 # Make code here 
 MV=mv -f # 
 RM=rm -f # 
 CP=cp -f # 
 MAKE_CALL=make #
-# 
-!endif
+endif #
+# \
+!endif 
 
 
 
 ##### CONSTANT BUILD #######
 MAKE: $(FILEBIN) $(OBJECTS) $(TST_OBJECTS)
-  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
-  $(MAKE_CALL) clean_up
+	$(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+	$(MAKE_CALL) clean_up
 
 MAKE_OBJ: $(FILEBIN) $(OBJECTS)
-  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
+	$(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
 
-fast: $(FILEBIN) $(OBJECTS)
-  $(CC) $(CFLAGS) $(FILEBIN) $(OBJECTS) -o $(FILE_EXE)
-  $(MAKE_CALL) clean_up
+fast: $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(FILE_EXE)
+	$(MAKE_CALL) clean_up
 
 $(FILEBIN): $(CFILE)
-  $(MAKE_CALL) build
-  $(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
+	$(MAKE_CALL) build
   $(MAKE_CALL) BUILD_OBJ
+	$(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
 
 build::
-  $(CP) blankmake Makefile
-  FOR %%i IN ($(OBJBUILDS))\
-    DO \
-    @echo( $$(CC) $$(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
+	$(CP) blankmake Makefile
+	FOR %%i IN ($(TST_OBJBUILDS))\
+		DO \
+		@echo( $$(CC) $$(CFLAGS) -c $$(TST_OBJ%%iSRC) -o $$(TST_OBJ%%i) >> Makefile
+	FOR %%i IN ($(OBJBUILDS))\
+		DO \
+		@echo( $$(CC) $$(CFLAGS) -c $$(OBJ%%iSRC) -o $$(OBJ%%i) >> Makefile
 
 run:
-  ($(FILE_EXE))
+	($(FILE_EXE))
 
 clean:
-  $(RM) $(APPS)
+	$(RM) $(APPS)
 
 clean_up:
-  $(RM) $(FILEBIN) $(OBJECTS)
+	$(RM) $(FILEBIN) $(OBJECTS) $(TST_OBJECTS)
 
 clean_all:
-  $(MAKE_CALL) clean_up
-  $(MAKE_CALL) clean
-  
+	$(MAKE_CALL) clean_up
+	$(MAKE_CALL) clean
+	
 BUILD_OBJ: 
-  @echo building...
-#####  VARIABLE BUILD  #####
+	@echo building...
+#####	VARIABLE BUILD	#####
  $(CC) $(CFLAGS) -c $(OBJ1SRC) -o $(OBJ1) 
  $(CC) $(CFLAGS) -c $(OBJ2SRC) -o $(OBJ2) 
  $(CC) $(CFLAGS) -c $(OBJ3SRC) -o $(OBJ3) 
  $(CC) $(CFLAGS) -c $(OBJ4SRC) -o $(OBJ4) 
  $(CC) $(CFLAGS) -c $(OBJ5SRC) -o $(OBJ5) 
+ $(CC) $(CFLAGS) -c $(OBJ6SRC) -o $(OBJ6) 
+ $(CC) $(CFLAGS) -c $(OBJ7SRC) -o $(OBJ7) 
+ $(CC) $(CFLAGS) -c $(OBJ8SRC) -o $(OBJ8) 
