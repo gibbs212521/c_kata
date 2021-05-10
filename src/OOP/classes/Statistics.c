@@ -3,6 +3,7 @@
 
 void buildStatistics(struct Statistics * this)
 {
+    /// Data Class Object
     this->sum = 0;
     this->item_count = 0;
     this->precision = 2;

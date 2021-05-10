@@ -2,18 +2,22 @@
 
 void buildBook(struct MyBookClass * this, char name[])
 {
+    /// Constructor Method for Class Object
     strcpy(this->name,name);
     struct Statistics stats;
     this->pstats = &stats;
+    /// Instantiating Statistics Object
     buildStatistics(this->pstats);
     this->stats = *this->pstats;
 
+    /// Assigning Vector Calls of Class Methods to Functions
     this->AddGrade = __AddGrade__;
     this->AddLetterGrade = __AddLetterGrade__;
     this->ShowStats = __ShowBookStats__;
     this->GetGradeFromLetter = __GetItemFromLetter__;
 }
 
+/// Defining the Functions assigned to Class Methods
 double __AddGrade__(struct MyBookClass * this, double grade)
 {
     if((grade>100) || (grade<0))

@@ -27,6 +27,7 @@ double __AddGradeToMem__(struct MemBook * this, double grade)
     double is_valid = this->base.AddGrade(&this->base, grade);
     this->stats = this->base.stats; // Pointer Error Occurred Here
 
+    /// The code below is handled automatically in many high-level languages
     if(is_valid==-1)
         return -1;
     double * _grades = (double *)malloc(this->stats.item_count*sizeof(double));
