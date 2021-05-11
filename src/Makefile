@@ -149,13 +149,15 @@ OBJBUILDS = $(OBJBUILDS) 8
 !ifndef 0# \
 MV = move # \
 RM=del # \
+RMDIR=rmdir # \
 CP=copy # \
 MAKE_CALL=nmake # \
 !else
 ifeq (0,0) #
 # Make code here 
 MV=mv -f # 
-RM=rm -f # 
+RM=rm -f #
+RMDIR=rm -rf
 CP=cp -f # 
 MAKE_CALL=make #
 endif #
@@ -177,8 +179,9 @@ fast: $(OBJECTS)
 	$(MAKE_CALL) clean_up
 
 $(FILEBIN): $(CFILE)
+	$(MAKE_CALL) BUILD_DIR
 	$(MAKE_CALL) build
-  $(MAKE_CALL) BUILD_OBJ
+	$(MAKE_CALL) BUILD_OBJ
 	$(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
 
 build::
@@ -195,15 +198,23 @@ run:
 
 clean:
 	$(RM) $(APPS)
+	$(RMDIR) $(BINPATH) $(TEST_BINPATH)
 
 clean_up:
 	$(RM) $(FILEBIN) $(OBJECTS) $(TST_OBJECTS)
+	$(RMDIR) $(OBJPATH) $(TEST_OBJPATH)
 
 clean_all:
 	$(MAKE_CALL) clean_up
 	$(MAKE_CALL) clean
+
+BUILD_DIR:
+	mkdir $(BINPATH)
+	mkdir $(OBJPATH)
+	mkdir $(TEST_BINPATH)
+	mkdir $(TEST_OBJPATH)
 	
-BUILD_OBJ: 
+BUILD_OBJ:
 	@echo building...
 #####	VARIABLE BUILD	#####
  $(CC) $(CFLAGS) -c $(OBJ1SRC) -o $(OBJ1) 

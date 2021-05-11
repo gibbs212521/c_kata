@@ -200,19 +200,23 @@ TST_OBJBUILDS := $(TST_OBJBUILDS) 2
 
 # Code below should allow $(MAKE_CALL) and make to operate successfully
 # $(MAKE_CALL) code here \
-ifeq (0,0) # \	
-MV:=move # \
-RM:=del # \
-CP:=copy # \
-MAKE_CALL:=nmake # \
-else
+!ifndef 0# \
+MV = move # \
+RM=del # \
+RMDIR=del # \
+CP=copy # \
+MAKE_CALL=nmake # \
+!else
 ifeq (0,0) #
 # Make code here 
-MV:=mv -f # 
-RM:=rm -f # 
-CP:=cp -f # 
-MAKE_CALL:=make #
-endif
+MV=mv -f # 
+RM=rm -f #
+RMDIR=rm -rf
+CP=cp -f # 
+MAKE_CALL=make #
+endif #
+# \
+!endif 
 
 
 
@@ -231,6 +235,7 @@ fast: $(TESTBIN) $(OBJECTS)
 	$(MAKE_CALL) clean_up
 
 $(FILEBIN): $(CFILE)
+	$(MAKE_CALL) BUILD_DIR
 	$(MAKE_CALL) build
 	$(CC) -c $(CFLAGS) $(CFILE) -o $(FILEBIN)
 
@@ -269,15 +274,23 @@ test:
 
 clean:
 	$(RM) $(APPS)
+	$(RMDIR) $(BINPATH) $(TEST_BINPATH)
 
 clean_up:
 	$(RM) $(FILEBIN) $(TESTBIN) $(OBJECTS) $(TST_OBJECTS)
+	$(RMDIR) $(OBJPATH) $(TEST_OBJPATH)
 
 clean_all:
 	$(MAKE_CALL) clean_up
 	$(MAKE_CALL) clean
+
+BUILD_DIR:
+	mkdir $(BINPATH)
+	mkdir $(OBJPATH)
+	mkdir $(TEST_BINPATH)
+	mkdir $(TEST_OBJPATH)
 	
-BUILD_OBJ: 
+BUILD_OBJ:
 	@echo building...
 #####	VARIABLE BUILD	#####
 	$(CC) $(CFLAGS) -c $(OBJ1SRC) -o $(OBJ1)
